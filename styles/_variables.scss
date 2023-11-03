@@ -1,0 +1,18 @@
+$red: #ff0000;
+$blue: #0000ff;
+$lightgrey: #fbf9f9;
+$grey: #f4efef;
+$darkgrey: #adadad;
+$hoverdarkgrey: #8e8e8e;
+
+$small: 0.75em;
+$regular: 1em;
+$regular2: 1.25em;
+$medium: 1.5em; // 24 / 16 = 1.5
+$large: 2em;
+$xlarge: 2.5em;
+$xxlarge: 4em;
+
+// @function shuttle-color($color) {
+//   @return map-get($shuttle-colors, $color);
+// }
