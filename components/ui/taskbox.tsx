@@ -13,8 +13,9 @@ export default function Taskbox() {
     console.log(`Delete task with id ${id}`);
   };
 
-  const onClick = (id: number) => {
-    console.log(`click ${id}`);
+  const onClick = (task: object) => {
+    const tasksArray = Object.values(task);
+    console.log("All tasks:", tasksArray);
   };
 
   const truncate = (description: string) => {
@@ -28,7 +29,7 @@ export default function Taskbox() {
         <li
           className={styles.taskboxCont}
           key={user.id}
-          onClick={() => onClick(user.id)}
+          onClick={() => onClick(user.task)}
         >
           <div>
             <div className="flex justify-between items-center">
@@ -39,6 +40,11 @@ export default function Taskbox() {
             <p className="w-fit text-sm uppercase font-bold py-2 px-3 bg-[black] text-white">
               {user.due}
             </p>
+            <div>
+              {Object.values(user.task).map((task, index) => (
+                <p key={index}>{task}</p>
+              ))}
+            </div>
           </div>
         </li>
       ))}
