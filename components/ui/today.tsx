@@ -27,12 +27,12 @@ export default function CurrentDate() {
 
   return (
     <div className="flex">
-      <div className="flex justify-center items-center text-4xl font-bold mr-1">
+      <div className="flex justify-center items-center text-5xl font-bold mr-2">
         <p>{state.currentDay}</p>
       </div>
       <div className="flex flex-col justify-center">
-        <p className="font-bold text-xs">{state.currentDayOfWeek}</p>
-        <p className="text-xs uppercase">{state.currentMonthYear}</p>
+        <p className="font-bold text-ms">{state.currentDayOfWeek}</p>
+        <p className="text-ms uppercase">{state.currentMonthYear}</p>
       </div>
     </div>
   );

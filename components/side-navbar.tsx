@@ -8,20 +8,20 @@ export function SideNavBar() {
       <SideProfile />
       <ul className="flex flex-col gap-12">
         <li className={styles.linksCont}>
-          <Link href={""}>All Shuttles</Link>
-          <Link href={""}>Available Now</Link>
+          <Link href="/all-shuttles">All Shuttles</Link>
+          <Link href="/available-now">Available Now</Link>
         </li>
         <li className={styles.linksCont}>
           <Link href="/all-task">All Task</Link>
-          <Link href={""}>Outgoing</Link>
-          <Link href={""}>Upcoming</Link>
+          <Link href="/outgoing">Outgoing</Link>
+          <Link href="/upcoming">Upcoming</Link>
         </li>
         <li className={styles.linksCont}>
-          <Link href={""}>Recurring</Link>
+          <Link href="/recurring">Recurring</Link>
         </li>
         <li className={styles.linksCont}>
-          <Link href={""}>Completed</Link>
-          <Link href={""}>Trash</Link>
+          <Link href="/completed">Completed</Link>
+          <Link href="/trash">Trash</Link>
         </li>
       </ul>
     </div>

@@ -1,8 +1,8 @@
 @import "@/styles/variables.scss";
 
 .sidenavbarCont {
-  min-width: 150px;
-  font-size: $regular2;
+  width: 100%;
+  font-size: $regular;
   height: 100%;
 }
 
@@ -11,6 +11,7 @@
   flex-direction: column;
   border-bottom: 1px solid #e5e5e5;
   padding-bottom: 3rem;
+  font-size: $regular2;
 }
 
 .linksCont a:first-child {

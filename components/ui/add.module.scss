@@ -1,0 +1,43 @@
+@import "@/styles/variables.scss";
+
+.input {
+  width: 90%;
+  padding: 1rem;
+  font-size: $small;
+  background-color: $lightgrey;
+  border: none;
+  outline: none;
+}
+
+.addCont {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5rem;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.addCont select {
+  width: 10%;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: $lightgrey;
+  border: none;
+  outline: none;
+  padding: 1rem;
+  font-size: 1.25em;
+  cursor: pointer;
+}
+
+.addCont .addContArrow {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  border-style: solid;
+  border-width: 6px 4px 0;
+  border-color: $darkgrey transparent transparent;
+  pointer-events: none;
+}
