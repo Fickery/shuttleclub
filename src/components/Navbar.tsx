@@ -253,7 +253,7 @@ export default function NavBar() {
                 >
                   <Link href="/tasks" onClick={ShowDropList}>
                     <span className="ml-3 flex-1 whitespace-nowrap text-left">
-                      Tasks
+                      All Tasks
                     </span>
                   </Link>
                   <div

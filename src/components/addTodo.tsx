@@ -6,6 +6,7 @@ import { addTodo } from "@/app/api/todo";
 const AddTodo = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [checkboxItems, setCheckboxItems] = useState([]);
   const [status, setStatus] = useState("pending");
   const [isLoading, setIsLoading] = useState(false);
   const { isLoggedIn, user } = useAuth();
@@ -32,6 +33,22 @@ const AddTodo = () => {
     setDescription("");
     setStatus("pending");
     showToast(title + " created successfully", "success");
+  };
+
+  const handleCheckboxChange = (index: number) => {
+    const updatedItems = [...checkboxItems];
+    updatedItems[index].isChecked = !updatedItems[index].isChecked;
+    setCheckboxItems(updatedItems);
+  };
+
+  const handleAddCheckbox = () => {
+    setCheckboxItems([...checkboxItems, { label: "", isChecked: false }]);
+  };
+
+  const handleRemoveCheckbox = (index) => {
+    const updatedItems = [...checkboxItems];
+    updatedItems.splice(index, 1);
+    setCheckboxItems(updatedItems);
   };
 
   return (

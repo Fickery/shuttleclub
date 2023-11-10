@@ -4,7 +4,7 @@ import Auth from "@/components/auth";
 
 export default function Page() {
   return (
-    <main className="flex min-h-screen bg-slate-300 text-black ">
+    <main className="flex min-h-screen bg-white text-black ">
       <AddTodo />
       <TodoList />
     </main>

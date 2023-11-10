@@ -25,9 +25,6 @@ export default function RootLayout({
           <div className="flex bg-white">
             <NavBar />
             {children}
-            <div className="w-64 bg-blue p-20 text-white">
-              <p>hi</p>
-            </div>
           </div>
         </AuthContextProvider>
       </body>

@@ -1,12 +1,16 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { SetStateAction, useEffect } from "react";
 import useAuth from "../hooks/useAuth";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../lib/firebase/config";
 import { FaToggleOff, FaToggleOn, FaTrash } from "react-icons/fa";
 import { deleteTodo, toggleTodoStatus } from "../app/api/todo";
 
-const TodoList = () => {
+interface TodoListProps {
+  onTaskClick: (task: SetStateAction<null>) => void;
+}
+
+const TodoList: React.FC<TodoListProps> = ({ onTaskClick }) => {
   const [todos, setTodos] = React.useState([]);
   const { user } = useAuth();
 
@@ -41,15 +45,19 @@ const TodoList = () => {
   };
 
   return (
-    <div className="w-full pt-5">
+    <div className="w-full">
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
         {todos &&
           todos.map((todo) => (
             <div
               key={todo.id}
+              onClick={() => {
+                onTaskClick(todo);
+                console.log(todo);
+              }}
               className="border border-gray-300 p-3 shadow-sm transition duration-200 hover:shadow-lg"
             >
-              <h3 className="text-xl">{todo.title}</h3>
+              <h3 className="text-xl font-black">{todo.title}</h3>
               <button
                 className="bg-red-500 hover:bg-red-600 float-right rounded p-1 text-black transition duration-200"
                 onClick={() => handleTodoDelete(todo.id)}

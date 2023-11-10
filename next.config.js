@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   reactStrictMode: true,
   images: {
     remotePatterns: [
@@ -11,6 +11,13 @@ const nextConfig = {
       },
     ],
   },
+  redirects: async () => {
+    return [
+      {
+        source: "/",
+        destination: "/tasks",
+        permanent: true,
+      },
+    ];
+  },
 };
-
-module.exports = nextConfig;
