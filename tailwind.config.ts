@@ -16,14 +16,14 @@ const config: Config = {
       colors: {
         red: "#FF0000",
         blue: "#1400FE",
-        lgrey: "#FBF9F9",
+        lightgrey: "#FBF9F9",
         grey: "#F4EFEF",
         dgrey: "#ADADAD",
         hovgrey: "#9A9A9A",
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 };
 
 export default config;

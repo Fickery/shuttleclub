@@ -1,12 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import { addTodo } from "@/app/api/todo";
 
 const AddTodo = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [checkboxItems, setCheckboxItems] = useState([]);
   const [status, setStatus] = useState("pending");
   const [isLoading, setIsLoading] = useState(false);
   const { isLoggedIn, user } = useAuth();
@@ -16,6 +15,11 @@ const AddTodo = () => {
   };
 
   const handleTodoCreate = async () => {
+    // if (Object.keys(tasks).length === 0) {
+    //   showToast("Please add at least one task", "error");
+    //   return;
+    // }
+
     if (!isLoggedIn) {
       showToast("You must be logged in to create a todo", "error");
       return;
@@ -35,41 +39,25 @@ const AddTodo = () => {
     showToast(title + " created successfully", "success");
   };
 
-  const handleCheckboxChange = (index: number) => {
-    const updatedItems = [...checkboxItems];
-    updatedItems[index].isChecked = !updatedItems[index].isChecked;
-    setCheckboxItems(updatedItems);
-  };
-
-  const handleAddCheckbox = () => {
-    setCheckboxItems([...checkboxItems, { label: "", isChecked: false }]);
-  };
-
-  const handleRemoveCheckbox = (index) => {
-    const updatedItems = [...checkboxItems];
-    updatedItems.splice(index, 1);
-    setCheckboxItems(updatedItems);
-  };
-
   return (
     <div className="mx-auto w-full text-sm">
       <div className="flex items-center justify-between gap-4">
         <input
-          className="w-1/4 border bg-[#FBF9F9] p-2"
+          className="w-1/4 border border-gray-300 bg-[#FBF9F9] p-2"
           type="text"
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
         <textarea
-          className="w-3/4 resize-none border bg-[#FBF9F9] p-2"
+          className="w-3/4 resize-none border border-gray-300 bg-[#FBF9F9] p-2"
           placeholder="Description"
           rows={1}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
         <select
-          className="w-1/4 border bg-[#FBF9F9] p-2"
+          className="w-1/4 border border-gray-300 bg-[#FBF9F9] p-2"
           value={status}
           onChange={(e) => setStatus(e.target.value)}
         >
@@ -80,6 +68,7 @@ const AddTodo = () => {
             Completed ✅
           </option>
         </select>
+
         <button
           className={` bg-teal-500 px-4 py-2 text-white ${
             title.length < 1 || description.length < 1 || isLoading

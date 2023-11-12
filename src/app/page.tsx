@@ -19,9 +19,12 @@ export default function Home() {
         <p className="w-full pt-5 text-start text-3xl font-black">All Task</p>
         <TodoList onTaskClick={handleTaskClick} />
       </div>
-      <div className="w-1/5 py-20 text-black">
-        <TodoContent selectedTask={selectedTask} />
-      </div>
+
+      {!selectedTask && (
+        <div className="w-1/5 py-20 text-black">
+          <TodoContent selectedTask={selectedTask} />
+        </div>
+      )}
     </main>
   );
 }

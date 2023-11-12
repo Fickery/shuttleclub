@@ -46,38 +46,48 @@ const TodoList: React.FC<TodoListProps> = ({ onTaskClick }) => {
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+      <div className="grid cursor-pointer grid-cols-1 gap-8 md:grid-cols-3">
         {todos &&
           todos.map((todo) => (
             <div
               key={todo.id}
               onClick={() => {
-                onTaskClick(todo);
+                onTaskClick({
+                  ...todo,
+                  isChecked: todo.status === "completed",
+                });
                 console.log(todo);
               }}
               className="border border-gray-300 p-3 shadow-sm transition duration-200 hover:shadow-lg"
             >
-              <h3 className="text-xl font-black">{todo.title}</h3>
-              <button
-                className="bg-red-500 hover:bg-red-600 float-right rounded p-1 text-black transition duration-200"
-                onClick={() => handleTodoDelete(todo.id)}
-              >
-                <FaTrash />
-              </button>
-              <button
-                className="float-right ml-2 rounded bg-green-500 p-1 text-white transition duration-200 hover:bg-green-600"
-                onClick={() => handleToggle(todo.id, todo.status)}
-              >
-                {todo.status === "pending" ? <FaToggleOff /> : <FaToggleOn />}
-              </button>
-              <span
-                className={`float-right p-1 opacity-80 ${
-                  todo.status === "pending" ? "bg-yellow-500" : "bg-green-500"
-                }`}
-              >
-                {todo.status}
-              </span>
-              <p>{todo.description}</p>
+              <div className="flex justify-between">
+                <h3 className="text-xl font-black">{todo.title}</h3>
+                <button
+                  className="float-right rounded p-1 text-black transition duration-100 hover:text-gray-400"
+                  onClick={() => handleTodoDelete(todo.id)}
+                >
+                  <FaTrash />
+                </button>
+              </div>
+              <div>
+                <p className="text-sm">{todo.description}</p>
+              </div>
+
+              <div className="flex w-full items-center pt-8  align-middle">
+                <span
+                  className={`float-right p-1 text-sm font-black opacity-80 ${
+                    todo.status === "pending" ? "bg-yellow-500" : "bg-green-500"
+                  }`}
+                >
+                  {todo.status}
+                </span>
+                <button
+                  className="float-right ml-2 rounded bg-black p-1 text-white transition duration-100 hover:bg-gray-400"
+                  onClick={() => handleToggle(todo.id, todo.status)}
+                >
+                  {todo.status === "pending" ? <FaToggleOff /> : <FaToggleOn />}
+                </button>
+              </div>
             </div>
           ))}
       </div>
