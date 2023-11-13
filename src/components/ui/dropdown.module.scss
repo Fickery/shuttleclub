@@ -1,0 +1,42 @@
+.dropdown {
+  position: relative;
+  display: inline-block;
+  transform: rotate(90deg);
+}
+
+.dropdownToggle {
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.dropdownToggle:hover {
+  color: #ccc;
+}
+
+.dropdownMenu {
+  transform: rotate(-90deg);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  list-style-type: none;
+  margin: 0;
+}
+
+.dropdownMenu ul {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdownMenu li {
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.dropdownMenu li:hover {
+  background-color: #f5f5f5;
+}

@@ -1,6 +1,12 @@
 import { GithubAuthProvider } from "firebase/auth";
-import { GoogleAuthProvider } from "firebase/auth";
-import { auth } from "./config";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import { auth, db } from "./config";
+import { addDoc, collection, getDoc, doc } from "firebase/firestore";
 
 onAuthStateChanged((user) => {
   if (user) {
@@ -22,6 +28,16 @@ export async function signInWithGoogle() {
   }
 }
 
+export async function getUserByUid(uid) {
+  try {
+    const userDoc = await getDoc(doc(db, "users", uid));
+    return userDoc.exists() ? userDoc.data() : null;
+  } catch (error) {
+    console.error("Error getting user:", error.message);
+    throw error;
+  }
+}
+
 export async function signInWithGithub() {
   const provider = new GithubAuthProvider();
 
@@ -37,5 +53,57 @@ export async function signOut() {
     return auth.signOut();
   } catch (error) {
     console.error("Error signing out with Google", error);
+  }
+}
+
+// Register a new user user passw
+export async function registerUser(email, password) {
+  try {
+    const { user } = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password,
+    );
+
+    await addDoc(collection(db, "users"), {
+      uid: user.uid,
+      email: user.email,
+      isAdmin,
+    });
+    return user;
+  } catch (error) {
+    console.error("Error registering user", error);
+    throw error;
+  }
+}
+
+// Login an existing user w/ user and pass
+export async function loginUser(email, password) {
+  try {
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
+    return user;
+  } catch (error) {
+    console.error("Error logging in user", error);
+    throw error;
+  }
+}
+
+// Sign up an admin user
+export async function SignUpAdmin() {
+  try {
+    await registerUser("admin@example.com", "adminPassword", true);
+    console.log("Admin user signed up successfully");
+  } catch (error) {
+    console.error("Error signing up admin user", error);
+  }
+}
+
+// Sign up a non-admin user
+export async function SignUpNonAdmin() {
+  try {
+    await registerUser("user@example.com", "userPassword", false);
+    console.log("Non-admin user signed up successfully");
+  } catch (error) {
+    console.error("Error signing up non-admin user", error);
   }
 }

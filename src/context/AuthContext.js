@@ -4,6 +4,8 @@ import {
   signOut,
   onAuthStateChanged,
   GoogleAuthProvider,
+  GithubAuthProvider,
+  signInWithRedirect,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
 
@@ -12,9 +14,16 @@ const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
+  //googleAuth
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
+    signInWithRedirect(auth, provider);
+  };
+
+  //githubAuth
+  const githubSignIn = () => {
+    const provider = new GithubAuthProvider();
+    signInWithRedirect(auth, provider);
   };
 
   const logOut = () => {
@@ -29,7 +38,7 @@ export const AuthContextProvider = ({ children }) => {
   }, [user]);
 
   return (
-    <AuthContext.Provider value={{ user, googleSignIn, logOut }}>
+    <AuthContext.Provider value={{ user, googleSignIn, githubSignIn, logOut }}>
       {children}
     </AuthContext.Provider>
   );

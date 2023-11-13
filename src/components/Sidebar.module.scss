@@ -1,0 +1,16 @@
+.active-link {
+  color: #fff;
+  background-color: #007bff;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  cursor: pointer;
+  text-decoration: none;
+  &:hover {
+    color: #fff;
+    background-color: #0069d9;
+    text-decoration: none;
+  }
+}

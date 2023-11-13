@@ -46,7 +46,7 @@ const TodoList: React.FC<TodoListProps> = ({ onTaskClick }) => {
 
   return (
     <div className="w-full">
-      <div className="grid cursor-pointer grid-cols-1 gap-8 md:grid-cols-3">
+      <div className="grid cursor-pointer grid-cols-1 gap-8 md:grid-cols-4">
         {todos &&
           todos.map((todo) => (
             <div
@@ -58,7 +58,11 @@ const TodoList: React.FC<TodoListProps> = ({ onTaskClick }) => {
                 });
                 console.log(todo);
               }}
-              className="border border-gray-300 p-3 shadow-sm transition duration-200 hover:shadow-lg"
+              className={`bg-[#FBF9F9] p-5 shadow-sm transition duration-200 hover:shadow-lg ${
+                todo.status === "completed"
+                  ? "opacity-50 hover:shadow-none"
+                  : "" // Add opacity for completed todos
+              }`}
             >
               <div className="flex justify-between">
                 <h3 className="text-xl font-black">{todo.title}</h3>

@@ -2,7 +2,6 @@
 import TodoContent from "@/components/TodoContent";
 import TodoList from "@/components/TodoList";
 import AddTodo from "@/components/addTodo";
-import Image from "next/image";
 import { SetStateAction, useState } from "react";
 
 export default function Home() {
@@ -19,6 +18,7 @@ export default function Home() {
         <p className="w-full pt-5 text-start text-3xl font-black">All Task</p>
         <TodoList onTaskClick={handleTaskClick} />
       </div>
+
       <div className="w-1/5 py-20 text-black">
         <TodoContent selectedTask={selectedTask} />
       </div>

@@ -1,8 +1,7 @@
-"use client";
 import React from "react";
 import { UserAuth } from "../context/AuthContext";
 
-export default function Home() {
+export default function Login() {
   const { user, googleSignIn, githubSignIn, logOut } = UserAuth();
 
   return (

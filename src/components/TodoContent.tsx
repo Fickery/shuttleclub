@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { FaTrash } from "react-icons/fa";
 import {
+  addDoc,
   collection,
+  doc,
   getDocs,
   updateDoc,
-  doc,
-  addDoc,
 } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { FaTrash } from "react-icons/fa";
 import { db } from "../lib/firebase/config";
+
+import Today from "./ui/Today";
 
 export default function TodoContent({ selectedTask }) {
   const [checkboxItems, setCheckboxItems] = useState([]);
   const [areAllCheckboxesChecked, setAreAllCheckboxesChecked] = useState(false);
+  const [editedDescription, setEditedDescription] = useState("");
+  const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
     const fetchCheckboxItems = async () => {
@@ -32,6 +36,7 @@ export default function TodoContent({ selectedTask }) {
     };
 
     fetchCheckboxItems();
+    setEditedDescription(selectedTask ? selectedTask.description : "");
   }, [selectedTask]);
 
   useEffect(() => {
@@ -39,6 +44,22 @@ export default function TodoContent({ selectedTask }) {
     setAreAllCheckboxesChecked(allChecked);
   }, [checkboxItems]);
 
+  //isCompleted button
+  useEffect(() => {
+    // Update the state of the "Complete" button based on the checkbox items' status
+    const allChecked = checkboxItems.every((item) => item.isChecked);
+    setAreAllCheckboxesChecked(allChecked);
+    setIsCompleted(!allChecked);
+  }, [checkboxItems]);
+
+  const handleCompleteButtonClick = async () => {
+    const taskDocRef = doc(db, "todo", selectedTask.id);
+    await updateDoc(taskDocRef, {
+      status: "completed",
+    });
+  };
+
+  //checkbox section
   const handleCheckboxChange = async (index) => {
     const updatedItems = [...checkboxItems];
     updatedItems[index].isChecked = !updatedItems[index].isChecked;
@@ -92,23 +113,46 @@ export default function TodoContent({ selectedTask }) {
     setCheckboxItems(updatedItems);
   };
 
-  return (
-    <div className="flex flex-col justify-between">
-      <p className="w-full border-none text-xs font-black text-[blue] placeholder:text-xs">
-        Today, JULY 2023
-      </p>
+  const handleDescriptionChange = (e) => {
+    setEditedDescription(e.target.value);
+  };
 
+  const handleSaveDescription = async () => {
+    // Update the description in Firebase
+    const taskDocRef = doc(db, "todo", selectedTask.id);
+    await updateDoc(taskDocRef, {
+      description: editedDescription,
+    });
+  };
+
+  return (
+    <div
+      className={`flex flex-col justify-between ${
+        selectedTask && selectedTask.status === "completed"
+          ? "pointer-events-none opacity-50"
+          : ""
+      }`}
+    >
+      <Today />
       {selectedTask && (
         <>
           <p className="pb-5 pt-5 text-2xl font-black tracking-tighter">
             {selectedTask.title}
           </p>
-          <p className="pb-5">{selectedTask.description}</p>
+          <textarea
+            className="mb-5 resize-none border-none bg-gray-100 text-sm"
+            rows={2}
+            maxLength={50}
+            placeholder="Edit Description"
+            value={editedDescription}
+            onChange={handleDescriptionChange}
+            onBlur={handleSaveDescription}
+          />
 
           {/* Checkbox section */}
           <div className="flex flex-col gap-2">
             {checkboxItems.map((item, index) => (
-              <div key={index} className="flex items-center gap-2">
+              <div key={index} className="flex items-center gap-2 pl-5">
                 <input
                   className="focus:ring-red-500 h-4 w-4 rounded-none border-gray-300 bg-gray-100"
                   name="checkbox"
@@ -135,21 +179,27 @@ export default function TodoContent({ selectedTask }) {
                 </button>
               </div>
             ))}
-            <button
-              className="my-8 w-fit text-sm tracking-tight text-teal-400  hover:text-teal-300"
-              onClick={handleAddCheckbox}
-            >
-              + Click to add task
-            </button>
+
+            {selectedTask && selectedTask.status === "completed" ? (
+              ""
+            ) : (
+              <button
+                className="my-8 w-fit text-sm tracking-tight text-teal-400  hover:text-teal-300"
+                onClick={handleAddCheckbox}
+              >
+                + Click to add task
+              </button>
+            )}
           </div>
         </>
       )}
 
       <button
-        className={`mx-auto w-full bg-teal-500 px-4 py-3 text-center text-base font-semibold text-white ${
+        onClick={handleCompleteButtonClick}
+        className={`mx-auto mb-5 w-full bg-teal-500 px-4 py-3 text-center text-base font-semibold text-white ${
           !areAllCheckboxesChecked
             ? "cursor-not-allowed opacity-50"
-            : "hover:bg-teal-300"
+            : "mt-5 hover:bg-teal-300"
         }`}
         disabled={!areAllCheckboxesChecked}
       >

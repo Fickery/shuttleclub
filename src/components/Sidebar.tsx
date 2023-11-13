@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { UserAuth } from "@/context/AuthContext";
+import Link from "next/link";
+import { useState } from "react";
 
 export default function Sidebar() {
   const [divHidden, setDivHidden] = useState<boolean>(true);
@@ -54,7 +54,7 @@ export default function Sidebar() {
                 >
                   <Link href="/tasks" onClick={ShowDropList}>
                     <span className="ml-3 flex-1 whitespace-nowrap text-left">
-                      Tasks
+                      All Tasks
                     </span>
                   </Link>
                   <div
