@@ -1,7 +1,15 @@
 "use client";
-import { useEffect, useState } from "react";
+import { TodoProps, addTodo } from "@/app/api/todo";
+import { useState } from "react";
 import useAuth from "../hooks/useAuth";
-import { addTodo } from "@/app/api/todo";
+
+interface AuthUser {
+  uid: string;
+  email: string;
+  displayName: string;
+  photoURL: string;
+  emailVerified: boolean;
+}
 
 const AddTodo = () => {
   const [title, setTitle] = useState("");
@@ -19,17 +27,21 @@ const AddTodo = () => {
     //   showToast("Please add at least one task", "error");
     //   return;
     // }
-
     if (!isLoggedIn) {
       showToast("You must be logged in to create a todo", "error");
       return;
     }
     setIsLoading(true);
-    const todo = {
+    const todo: TodoProps = {
+      docId: uuidv4(),
+      id: uuidv4(),
+      isChecked: false,
+      label: "",
+      userId: uuidv4(),
       title,
       description,
       status,
-      userId: user.uid,
+      task: [] as [],
     };
     await addTodo(todo);
     setIsLoading(false);
@@ -86,3 +98,6 @@ const AddTodo = () => {
 };
 
 export default AddTodo;
+function uuidv4(): string | number {
+  throw new Error("Function not implemented.");
+}

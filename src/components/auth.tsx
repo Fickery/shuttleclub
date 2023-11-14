@@ -1,9 +1,8 @@
 "use client";
-import React from "react";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { FaGoogle, FaMoon, FaSun } from "react-icons/fa";
-import { auth } from "../lib/firebase/config";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { FaGoogle } from "react-icons/fa";
 import useAuth from "../hooks/useAuth";
+import { auth } from "../lib/firebase/config";
 
 const Auth = () => {
   const { isLoggedIn, user } = useAuth();
@@ -13,8 +12,10 @@ const Auth = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        const user = result.user;
+        if (credential !== null) {
+          const token = credential.accessToken;
+          const user = result.user;
+        }
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -28,7 +29,7 @@ const Auth = () => {
     <div className="fixed right-5 top-5">
       {isLoggedIn && (
         <>
-          <p className="text-green-500">{user.email}</p>
+          {/* <p className="text-green-500">{user.email}</p> */}
           <button className="text-red-500" onClick={() => auth.signOut()}>
             Logout
           </button>
@@ -45,3 +46,6 @@ const Auth = () => {
 };
 
 export default Auth;
+function useState<T>(arg0: null): [any, any] {
+  throw new Error("Function not implemented.");
+}

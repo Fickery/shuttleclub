@@ -2,12 +2,14 @@
 import TodoContent from "@/components/TodoContent";
 import TodoList from "@/components/TodoList";
 import AddTodo from "@/components/addTodo";
-import { SetStateAction, useState } from "react";
+import { Section } from "@/components/ui/Section";
+import { useState } from "react";
+import { TodoProps } from "@/app/api/todo";
 
 export default function Home() {
-  const [selectedTask, setSelectedTask] = useState(null);
+  const [selectedTask, setSelectedTask] = useState<TodoProps | null>(null);
 
-  const handleTaskClick = (task: SetStateAction<null>) => {
+  const handleTaskClick = (task: TodoProps) => {
     setSelectedTask(task);
   };
 
@@ -15,8 +17,8 @@ export default function Home() {
     <main className="flex min-h-screen w-full">
       <div className="flex h-full w-3/4 flex-col items-center gap-5 bg-white p-20 text-black">
         <AddTodo />
-        <p className="w-full pt-5 text-start text-3xl font-black">All Task</p>
-        <TodoList onTaskClick={handleTaskClick} />
+        <Section>All Task</Section>
+        <TodoList onTaskClick={() => handleTaskClick} />
       </div>
 
       <div className="w-1/5 py-20 text-black">

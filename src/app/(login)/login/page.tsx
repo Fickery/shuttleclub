@@ -1,13 +1,11 @@
 "use client";
 import React from "react";
 import { UserAuth } from "../../../context/AuthContext";
-import "../../globals.css";
-import { Input } from "@nextui-org/react";
 
 export default function Login() {
   const { user, googleSignIn, githubSignIn, logOut } = UserAuth();
 
-  const handleGoogleSignIn = async (e) => {
+  const handleGoogleSignIn = async (e: Event) => {
     e.preventDefault();
     try {
       await googleSignIn();
@@ -16,7 +14,7 @@ export default function Login() {
     }
   };
 
-  const handleGithubSignIn = async (e) => {
+  const handleGithubSignIn = async (e: Event) => {
     e.preventDefault();
     try {
       await githubSignIn();
@@ -70,20 +68,20 @@ export default function Login() {
               <div className="mx-auto mt-5 flex gap-4 text-xs">
                 <button
                   className="border px-7 py-1 hover:bg-gray-100"
-                  onClick={handleGoogleSignIn}
+                  onClick={() => handleGoogleSignIn}
                 >
                   Google
                 </button>
                 <button
                   className="border px-7 py-1 hover:bg-gray-100"
-                  onClick={handleGithubSignIn}
+                  onClick={() => handleGithubSignIn}
                 >
                   GitHub
                 </button>
               </div>
               <button
                 className="text-gray-40 pt-20 text-xs text-gray-500 hover:text-gray-400"
-                onClick={handleGithubSignIn}
+                onClick={() => handleGithubSignIn}
               >
                 Get a new shuttle: Force Sign up
               </button>

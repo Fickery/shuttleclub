@@ -1,8 +1,7 @@
 "use client";
 import { AuthContextProvider } from "@/context/AuthContext";
 import { DM_Sans } from "next/font/google";
-import "../../globals.css";
-import NavBar from "@/components/Navbar";
+import "../globals.css";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
@@ -17,10 +16,10 @@ export default function RootLayout({
         <title>ShuttleClub</title>
         <meta name="description" content="Description" />
       </head>
+
       <body className={dmSans.className}>
         <AuthContextProvider>
-          <NavBar />
-          <div className="h-screen bg-white">{children}</div>
+          <div className="bg-white">{children}</div>
         </AuthContextProvider>
       </body>
     </html>

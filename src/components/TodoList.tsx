@@ -5,25 +5,39 @@ import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../lib/firebase/config";
 import { FaToggleOff, FaToggleOn, FaTrash } from "react-icons/fa";
 import { deleteTodo, toggleTodoStatus } from "../app/api/todo";
+import { TodoProps } from "../app/api/todo";
+import AuthUser from "@/path-to/AuthUser";
 
-interface TodoListProps {
-  onTaskClick: (task: SetStateAction<null>) => void;
-}
+type TodoListProps = {
+  onTaskClick: (task: SetStateAction<TodoProps | null>) => void;
+};
 
-const TodoList: React.FC<TodoListProps> = ({ onTaskClick }) => {
-  const [todos, setTodos] = React.useState([]);
-  const { user } = useAuth();
+export const TodoList = ({ onTaskClick }: TodoListProps) => {
+  const [todos, setTodos] = React.useState<TodoProps[]>([]);
+  const { user }: { user: AuthUser | null } = useAuth();
 
   const refreshData = () => {
+    const userId = user;
     if (!user) {
       setTodos([]);
       return;
     }
-    const q = query(collection(db, "todo"), where("user", "==", user.uid));
+    const q = query(collection(db, "todo"), where("user", "==", userId));
     onSnapshot(q, (querySnapchot) => {
-      let ar = [];
+      let ar: TodoProps[] = [];
       querySnapchot.docs.forEach((doc) => {
-        ar.push({ id: doc.id, ...doc.data() });
+        ar.push({
+          id: doc.id,
+          ...doc.data(),
+          docId: "",
+          isChecked: false,
+          label: "",
+          userId: "",
+          title: "",
+          description: "",
+          status: "",
+          task: [],
+        });
       });
       setTodos(ar);
     });
@@ -33,15 +47,14 @@ const TodoList: React.FC<TodoListProps> = ({ onTaskClick }) => {
     refreshData();
   }, [user]);
 
-  const handleTodoDelete = async (id) => {
+  const handleTodoDelete = async (id: TodoProps) => {
     if (confirm("Are you sure you want to delete this todo?")) {
       deleteTodo(id);
     }
   };
 
-  const handleToggle = async (id, status) => {
-    const newStatus = status === "completed" ? "pending" : "completed";
-    await toggleTodoStatus({ docId: id, status: newStatus });
+  const handleToggle = async (todo: TodoProps) => {
+    const { id, status } = todo;
   };
 
   return (
@@ -68,7 +81,7 @@ const TodoList: React.FC<TodoListProps> = ({ onTaskClick }) => {
                 <h3 className="text-xl font-black">{todo.title}</h3>
                 <button
                   className="float-right rounded p-1 text-black transition duration-100 hover:text-gray-400"
-                  onClick={() => handleTodoDelete(todo.id)}
+                  onClick={() => handleTodoDelete(todo)}
                 >
                   <FaTrash />
                 </button>
@@ -87,7 +100,7 @@ const TodoList: React.FC<TodoListProps> = ({ onTaskClick }) => {
                 </span>
                 <button
                   className="float-right ml-2 rounded bg-black p-1 text-white transition duration-100 hover:bg-gray-400"
-                  onClick={() => handleToggle(todo.id, todo.status)}
+                  onClick={() => handleToggle(todo)}
                 >
                   {todo.status === "pending" ? <FaToggleOff /> : <FaToggleOn />}
                 </button>

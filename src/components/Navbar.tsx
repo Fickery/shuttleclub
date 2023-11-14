@@ -23,7 +23,7 @@ export default function NavBar() {
   // console.log(user);
 
   //sign in / sign out
-  const handleSignIn = async (e) => {
+  const handleSignIn = async (e: Event) => {
     e.preventDefault();
     setDivHidden(true);
     try {
@@ -33,7 +33,7 @@ export default function NavBar() {
     }
   };
 
-  const handleSignOut = async (e) => {
+  const handleSignOut = async (e: Event) => {
     e.preventDefault();
     setDivHidden(true);
     try {
@@ -185,7 +185,7 @@ export default function NavBar() {
                 href="#"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                 role="menuitem"
-                onClick={handleSignOut}
+                onClick={() => handleSignOut}
               >
                 Sign out
               </Link>
@@ -215,7 +215,7 @@ export default function NavBar() {
                 href="/"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                 role="menuitem"
-                onClick={handleSignIn}
+                onClick={() => handleSignIn}
               >
                 Sign Up
               </Link>

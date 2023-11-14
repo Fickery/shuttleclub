@@ -5,14 +5,24 @@ import {
   getDocs,
   updateDoc,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { db } from "../lib/firebase/config";
-
 import Today from "./ui/Today";
+import { TodoProps } from "@/app/api/todo";
 
-export default function TodoContent({ selectedTask }) {
-  const [checkboxItems, setCheckboxItems] = useState([]);
+interface CheckboxItem {
+  id: string;
+  label: string;
+  isChecked: boolean; // fixed the type error
+}
+
+interface TodoContentProps {
+  selectedTask: TodoProps | null;
+}
+
+export default function TodoContent({ selectedTask }: TodoContentProps) {
+  const [checkboxItems, setCheckboxItems] = useState<CheckboxItem[]>([]);
   const [areAllCheckboxesChecked, setAreAllCheckboxesChecked] = useState(false);
   const [editedDescription, setEditedDescription] = useState("");
   const [isCompleted, setIsCompleted] = useState(false);
@@ -23,13 +33,14 @@ export default function TodoContent({ selectedTask }) {
         const checkboxItemsRef = collection(
           db,
           "todo",
-          selectedTask.id,
+          selectedTask.id.toString(),
           "checkboxItemsCollection",
         );
         const snapshot = await getDocs(checkboxItemsRef);
         const items = snapshot.docs.map((doc) => ({
           id: doc.id,
-          ...doc.data(),
+          label: doc.data().label || "",
+          isChecked: doc.data().isChecked || false,
         }));
         setCheckboxItems(items);
       }
@@ -53,14 +64,14 @@ export default function TodoContent({ selectedTask }) {
   }, [checkboxItems]);
 
   const handleCompleteButtonClick = async () => {
-    const taskDocRef = doc(db, "todo", selectedTask.id);
+    const taskDocRef = doc(db, "todo", `${selectedTask?.id}`);
     await updateDoc(taskDocRef, {
       status: "completed",
     });
   };
 
   //checkbox section
-  const handleCheckboxChange = async (index) => {
+  const handleCheckboxChange = async (index: number) => {
     const updatedItems = [...checkboxItems];
     updatedItems[index].isChecked = !updatedItems[index].isChecked;
     setCheckboxItems(updatedItems);
@@ -69,7 +80,7 @@ export default function TodoContent({ selectedTask }) {
     const checkboxDocRef = doc(
       db,
       "todo",
-      selectedTask.id,
+      `${selectedTask?.id}`,
       "checkboxItemsCollection",
       updatedItems[index].id,
     );
@@ -85,7 +96,7 @@ export default function TodoContent({ selectedTask }) {
     const checkboxItemsRef = collection(
       db,
       "todo",
-      selectedTask.id,
+      `${selectedTask?.id}`,
       "checkboxItemsCollection",
     );
     const newItemRef = await addDoc(checkboxItemsRef, newItem);
@@ -93,7 +104,7 @@ export default function TodoContent({ selectedTask }) {
     setCheckboxItems([...checkboxItems, { id: newItemRef.id, ...newItem }]);
   };
 
-  const handleRemoveCheckbox = async (index) => {
+  const handleRemoveCheckbox = async (index: number) => {
     const updatedItems = [...checkboxItems];
     const removedItemId = updatedItems[index].id;
 
@@ -101,7 +112,7 @@ export default function TodoContent({ selectedTask }) {
     const checkboxDocRef = doc(
       db,
       "todo",
-      selectedTask.id,
+      `${selectedTask?.id}`,
       "checkboxItemsCollection",
       removedItemId,
     );
@@ -113,13 +124,15 @@ export default function TodoContent({ selectedTask }) {
     setCheckboxItems(updatedItems);
   };
 
-  const handleDescriptionChange = (e) => {
+  const handleDescriptionChange = (
+    e: ChangeEvent<HTMLTextAreaElement>,
+  ): void => {
     setEditedDescription(e.target.value);
   };
 
   const handleSaveDescription = async () => {
     // Update the description in Firebase
-    const taskDocRef = doc(db, "todo", selectedTask.id);
+    const taskDocRef = doc(db, "todo", `${selectedTask?.id}`);
     await updateDoc(taskDocRef, {
       description: editedDescription,
     });
@@ -195,7 +208,7 @@ export default function TodoContent({ selectedTask }) {
       )}
 
       <button
-        onClick={handleCompleteButtonClick}
+        onClick={() => handleCompleteButtonClick()}
         className={`mx-auto mb-5 w-full bg-teal-500 px-4 py-3 text-center text-base font-semibold text-white ${
           !areAllCheckboxesChecked
             ? "cursor-not-allowed opacity-50"

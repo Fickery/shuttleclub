@@ -1,29 +1,27 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import {
+  onAuthStateChanged,
   signInWithGoogle,
   signOut,
-  onAuthStateChanged,
 } from "@/lib/firebase/auth.js";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-function useUserSession(initialUser) {
+function useUserSession(initialUser: any) {
   // The initialUser comes from the server through a server component
   const [user, setUser] = useState(initialUser);
   const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged((authUser) => {
+    const unsubscribe = onAuthStateChanged((authUser: any) => {
       setUser(authUser);
     });
-    return () => {
-      unsubscribe();
-    };
+    return unsubscribe;
   }, []);
 
   useEffect(() => {
-    onAuthStateChanged((authUser) => {
+    onAuthStateChanged((authUser: { email: any }) => {
       if (user === undefined) return;
       if (user?.email !== authUser?.email) {
         router.refresh();
@@ -34,16 +32,16 @@ function useUserSession(initialUser) {
   return user;
 }
 
-export default function Header({ initialUser }) {
+export default function Header({ initialUser }: any) {
   const user = useUserSession(initialUser);
 
-  const handleSignOut = (event) => {
-    event.preventDefault();
+  const handleSignOut = (e: MouseEvent) => {
+    e.preventDefault();
     signOut();
   };
 
-  const handleSignIn = (event) => {
-    event.preventDefault();
+  const handleSignIn = (e: MouseEvent) => {
+    e.preventDefault();
     signInWithGoogle();
   };
 
@@ -66,7 +64,7 @@ export default function Header({ initialUser }) {
               <ul>
                 <li>{user.displayName}</li>
                 <li>
-                  <a href="#" onClick={handleSignOut}>
+                  <a href="#" onClick={() => handleSignOut}>
                     Sign Out
                   </a>
                 </li>
@@ -75,7 +73,7 @@ export default function Header({ initialUser }) {
           </div>
         </>
       ) : (
-        <a href="#" onClick={handleSignIn}>
+        <a href="#" onClick={() => handleSignIn}>
           Sign In with Google
         </a>
       )}

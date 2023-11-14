@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 export default function Page() {
   const { user } = UserAuth();
   const [loading, setLoading] = useState<boolean>(true);
+  const [selectedTask, setSelectedTask] = useState(null);
 
   //loading
   useEffect(() => {
@@ -31,7 +32,7 @@ export default function Page() {
       </div>
 
       <div className="w-1/5 py-20 text-black">
-        <TodoContent />
+        <TodoContent selectedTask={selectedTask} />
       </div>
     </main>
   );

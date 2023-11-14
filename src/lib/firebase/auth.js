@@ -8,7 +8,7 @@ import {
 import { auth, db } from "./config";
 import { addDoc, collection, getDoc, doc } from "firebase/firestore";
 
-onAuthStateChanged((user) => {
+export const onAuthStateChanged = (user) => {
   if (user) {
     // User is signed in.
     console.log("User is signed in");
@@ -16,7 +16,7 @@ onAuthStateChanged((user) => {
     // User is signed out.
     console.log("User is signed out");
   }
-});
+};
 
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
