@@ -11,13 +11,4 @@ module.exports = {
       },
     ],
   },
-  redirects: async () => {
-    return [
-      {
-        source: "/",
-        destination: "/tasks",
-        permanent: true,
-      },
-    ];
-  },
 };
