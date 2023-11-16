@@ -1,17 +1,22 @@
 "use client";
-import React, { SetStateAction, useEffect } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../lib/firebase/config";
 import { FaToggleOff, FaToggleOn, FaTrash } from "react-icons/fa";
 import { deleteTodo, toggleTodoStatus } from "../app/api/todo";
+import { TodoProps } from "../app/api/todo";
 
+//types
 interface TodoListProps {
   onTaskClick: (task: SetStateAction<null>) => void;
 }
 
-const TodoList: React.FC<TodoListProps> = ({ onTaskClick }) => {
-  const [todos, setTodos] = React.useState([]);
+type TodoPropId = TodoProps["id"];
+type TodoPropStatus = TodoProps["status"];
+
+const TodoList = ({ onTaskClick }: TodoListProps) => {
+  const [todos, setTodos] = useState<TodoProps[]>([] as TodoProps[]);
   const { user } = useAuth();
 
   const refreshData = () => {
@@ -21,7 +26,7 @@ const TodoList: React.FC<TodoListProps> = ({ onTaskClick }) => {
     }
     const q = query(collection(db, "todo"), where("user", "==", user.uid));
     onSnapshot(q, (querySnapchot) => {
-      let ar = [];
+      let ar: any[] = [];
       querySnapchot.docs.forEach((doc) => {
         ar.push({ id: doc.id, ...doc.data() });
       });
@@ -33,13 +38,13 @@ const TodoList: React.FC<TodoListProps> = ({ onTaskClick }) => {
     refreshData();
   }, [user]);
 
-  const handleTodoDelete = async (id) => {
+  const handleTodoDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this todo?")) {
       deleteTodo(id);
     }
   };
 
-  const handleToggle = async (id, status) => {
+  const handleToggle = async (id: string, status: TodoPropStatus) => {
     const newStatus = status === "completed" ? "pending" : "completed";
     await toggleTodoStatus({ docId: id, status: newStatus });
   };

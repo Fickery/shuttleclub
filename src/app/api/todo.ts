@@ -6,7 +6,24 @@ import {
   doc,
   deleteDoc,
 } from "firebase/firestore";
-const addTodo = async ({ userId, title, description, status, task }) => {
+
+export type TodoProps = {
+  userId: string;
+  title: string;
+  description: string;
+  status: string;
+  task: any[];
+  id: string;
+  docId: string;
+};
+
+const addTodo = async ({
+  userId,
+  title,
+  description,
+  status,
+  task,
+}: TodoProps) => {
   try {
     await addDoc(collection(db, "todo"), {
       user: userId,
@@ -18,7 +35,7 @@ const addTodo = async ({ userId, title, description, status, task }) => {
     });
   } catch (err) {}
 };
-const toggleTodoStatus = async ({ docId, status }) => {
+const toggleTodoStatus = async ({ docId, status }: TodoProps) => {
   try {
     const todoRef = doc(db, "todo", docId);
     await updateDoc(todoRef, {
@@ -28,7 +45,7 @@ const toggleTodoStatus = async ({ docId, status }) => {
     console.log(err);
   }
 };
-const deleteTodo = async (docId) => {
+const deleteTodo = async (docId: string) => {
   try {
     const todoRef = doc(db, "todo", docId);
     await deleteDoc(todoRef);

@@ -1,11 +1,12 @@
 "use client";
-import React from "react";
+import { useRouter } from "next/navigation";
 import { UserAuth } from "../../../context/AuthContext";
 import "../../globals.css";
-import { Input } from "@nextui-org/react";
+import { useEffect } from "react";
 
 export default function Login() {
   const { user, googleSignIn, githubSignIn, logOut } = UserAuth();
+  const router = useRouter();
 
   const handleGoogleSignIn = async (e) => {
     e.preventDefault();
@@ -25,14 +26,17 @@ export default function Login() {
     }
   };
 
+  useEffect(() => {
+    if (user) {
+      router.push("/tasks");
+    }
+  }, [user]);
+
   return (
-    <div className="mb-20 flex h-screen items-center justify-center text-black">
+    <div className="flex h-screen w-full items-center justify-center text-black">
       <div className="w-[20%] border border-gray-100 shadow-sm">
         {user ? (
-          <div className="">
-            <p>Welcome, {user.displayName || user.email}!</p>
-            <button onClick={logOut}>Logout</button>
-          </div>
+          <div className="">/tasks</div>
         ) : (
           // If user is not logged in, show login options
           <div className="text-center">
@@ -40,14 +44,6 @@ export default function Login() {
               ShuttleClub
             </p>
             <p className="pt-1 text-sm">From tasks to triumph</p>
-            {/* <div className="flex items-center justify-center gap-1">
-              <p className="w-full cursor-pointer border-b px-5 py-1 text-sm lowercase hover:bg-gray-200">
-                LOGIN
-              </p>
-              <p className="w-full cursor-pointer border-b px-5 py-1 text-sm lowercase hover:bg-gray-200">
-                SIGN UP
-              </p>
-            </div> */}
             <div className="flex flex-col p-10">
               <div className="mx-auto flex w-full flex-col gap-3">
                 <input

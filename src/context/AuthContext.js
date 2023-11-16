@@ -8,11 +8,13 @@ import {
   signInWithRedirect,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
+import { useRouter } from "next/navigation";
 
 const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const router = useRouter();
 
   //googleAuth
   const googleSignIn = () => {

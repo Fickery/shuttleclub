@@ -19,8 +19,8 @@ export default function RootLayout({
       </head>
       <body className={dmSans.className}>
         <AuthContextProvider>
-          <div className="flex bg-white">
-            <NavBar />
+          <div className="flex bg-white text-black">
+            {/* <NavBar /> */}
             {children}
           </div>
         </AuthContextProvider>
