@@ -1,6 +1,6 @@
 "use client";
 import NavBar from "@/components/Navbar";
-import { AuthContextProvider } from "@/context/AuthContext";
+import { AuthContextProvider, UserAuth } from "@/context/AuthContext";
 import { DM_Sans } from "next/font/google";
 import "../globals.css";
 
@@ -11,6 +11,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { user } = UserAuth();
   return (
     <html lang="en">
       <head>
@@ -20,7 +21,7 @@ export default function RootLayout({
       <body className={dmSans.className}>
         <AuthContextProvider>
           <div className="flex bg-white">
-            <NavBar />
+            {user && <NavBar />}
             {children}
           </div>
         </AuthContextProvider>

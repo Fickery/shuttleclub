@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { UserAuth } from "@/context/AuthContext";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function NavBar() {
   const [divHidden, setDivHidden] = useState<boolean>(true);
@@ -46,9 +46,11 @@ export default function NavBar() {
   //loading
   useEffect(() => {
     const checkAuthentication = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setLoading(false);
-      console.log("loading");
+      if (typeof window !== "undefined") {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setLoading(false);
+        console.log("loading");
+      }
     };
     checkAuthentication();
   }, [user]);
@@ -67,7 +69,7 @@ export default function NavBar() {
   const router = usePathname();
 
   return (
-    <>
+    <div>
       <nav className="fixed top-0 z-50 w-full bg-white">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
@@ -155,29 +157,11 @@ export default function NavBar() {
           <ul className="py-1" role="none">
             <li>
               <Link
-                href="/home"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                role="menuitem"
-              >
-                Dashboard
-              </Link>
-            </li>
-            <li>
-              <Link
                 href="#"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                 role="menuitem"
               >
                 Settings
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                role="menuitem"
-              >
-                Calendar
               </Link>
             </li>
             <li>
@@ -314,6 +298,6 @@ export default function NavBar() {
           </ul>
         </div>
       </aside>
-    </>
+    </div>
   );
 }

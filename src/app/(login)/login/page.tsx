@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { UserAuth } from "../../../context/AuthContext";
 import "../../globals.css";
 import { useEffect } from "react";
+import { FaGithub, FaGoogle } from "react-icons/fa";
 
 export default function Login() {
   const { user, googleSignIn, githubSignIn, logOut } = UserAuth();
@@ -61,19 +62,25 @@ export default function Login() {
                 <button className="bg-gray-500 px-2 py-3 text-sm font-medium text-white hover:bg-gray-400">
                   LOGIN
                 </button>
-                <p className="text-xs text-gray-400">Or login with</p>
+                <div className="flex items-center text-gray-400">
+                  <hr className="flex-grow border-t border-gray-200" />
+                  <span className="mx-4 text-xs">or login with</span>
+                  <hr className="flex-grow border-t border-gray-200" />
+                </div>
               </div>
               <div className="mx-auto mt-5 flex gap-4 text-xs">
                 <button
-                  className="border px-7 py-1 hover:bg-gray-100"
+                  className="flex items-center gap-2 border px-7 py-1 hover:bg-gray-100"
                   onClick={handleGoogleSignIn}
                 >
+                  <FaGoogle />
                   Google
                 </button>
                 <button
-                  className="border px-7 py-1 hover:bg-gray-100"
+                  className="flex items-center gap-2 border px-7 py-1 hover:bg-gray-100"
                   onClick={handleGithubSignIn}
                 >
+                  <FaGithub />
                   GitHub
                 </button>
               </div>
