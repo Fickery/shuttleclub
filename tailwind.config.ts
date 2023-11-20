@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import { nextui } from "@nextui-org/react";
 
 const config: Config = {
   content: [
@@ -16,6 +17,8 @@ const config: Config = {
         dgrey: "#ADADAD",
         hovgrey: "#9A9A9A",
       },
+      darkMode: "class",
+      plugins: [nextui()],
     },
   },
   plugins: [require("@tailwindcss/forms")],

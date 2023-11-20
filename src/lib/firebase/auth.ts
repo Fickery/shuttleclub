@@ -8,12 +8,31 @@ import {
 import { auth, db } from "./config";
 import { addDoc, collection, getDoc, doc } from "firebase/firestore";
 
+export type setCustomUserClaims = (
+  uid: string,
+  claims: object,
+) => Promise<void>;
+
+const admin = require("firebase-admin");
+const uid = "USER_ID";
+const claims = {
+  admin: true,
+};
+
+admin
+  .auth()
+  .setCustomUserClaims(uid, claims)
+  .then(() => {
+    console.log("Custom claims set for user:", uid);
+  })
+  .catch((error: string) => {
+    console.log("Error setting custom claims for user:", error);
+  });
+
 onAuthStateChanged((user) => {
   if (user) {
-    // User is signed in.
     console.log("User is signed in");
   } else {
-    // User is signed out.
     console.log("User is signed out");
   }
 });
@@ -106,4 +125,7 @@ export async function SignUpNonAdmin() {
   } catch (error) {
     console.error("Error signing up non-admin user", error);
   }
+}
+function onAuthStateChanged(arg0: (user: any) => void) {
+  throw new Error("Function not implemented.");
 }

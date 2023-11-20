@@ -12,6 +12,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const { user } = UserAuth();
+
   return (
     <html lang="en">
       <head>
