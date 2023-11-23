@@ -14,20 +14,10 @@ export type setCustomUserClaims = (
 ) => Promise<void>;
 
 const admin = require("firebase-admin");
-const uid = "USER_ID";
-const claims = {
-  admin: true,
-};
-
-admin
-  .auth()
-  .setCustomUserClaims(uid, claims)
-  .then(() => {
-    console.log("Custom claims set for user:", uid);
-  })
-  .catch((error: string) => {
-    console.log("Error setting custom claims for user:", error);
-  });
+// const uid = "USER_ID";
+// const claims = {
+//   admin: true,
+// };
 
 onAuthStateChanged((user) => {
   if (user) {
@@ -41,9 +31,40 @@ export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
 
   try {
-    await signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    // Set the user's role to "master"
+    await admin.auth().setCustomUserClaims(user.uid, {
+      role: "master",
+    });
+
+    // Check if the user has the "master" role
+    const idTokenResult = await user.getIdTokenResult();
+    const isMaster = idTokenResult.claims.role === "master";
+
+    console.log("Is user master?", isMaster);
   } catch (error) {
     console.error("Error signing in with Google", error);
+  }
+}
+
+export async function signInWithGithub() {
+  const provider = new GithubAuthProvider();
+
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    await admin.auth().setCustomUserClaims(user.uid, { role: "admin" });
+
+    // Check if the user has the "master" role
+    const idTokenResult = await user.getIdTokenResult();
+    const isMaster = idTokenResult.claims.role === "master";
+
+    console.log("Is user master?", isMaster);
+  } catch (error) {
+    console.error("Error signing in with Github", error);
   }
 }
 
@@ -57,16 +78,6 @@ export async function getUserByUid(uid) {
   }
 }
 
-export async function signInWithGithub() {
-  const provider = new GithubAuthProvider();
-
-  try {
-    await signInWithPopup(auth, provider);
-  } catch (error) {
-    console.error("Error signing in with Github", error);
-  }
-}
-
 export async function signOut() {
   try {
     return auth.signOut();
@@ -76,7 +87,7 @@ export async function signOut() {
 }
 
 // Register a new user user passw
-export async function registerUser(email, password) {
+export async function registerUser(email, password, isAdmin = true) {
   try {
     const { user } = await createUserWithEmailAndPassword(
       auth,
