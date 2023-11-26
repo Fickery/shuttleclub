@@ -1,15 +1,31 @@
 "use client";
-import Login from "@/app/(login)/login/page";
+import Loading from "@/app/loading";
 import TodoContent from "@/components/TodoContent";
 import TodoList from "@/components/TodoList";
 import AddTodo from "@/components/addTodo";
 import { UserAuth } from "@/context/AuthContext";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, Suspense, useEffect, useState } from "react";
 
 export default function Tasks() {
   const { user } = UserAuth();
-
   const [selectedTask, setSelectedTask] = useState(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // //isSession
+  // const session = useSession({
+  //   required: true,
+  //   onUnauthenticated() {
+  //     redirect("/login");
+  //   },
+  // });
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1100));
+      setLoading(false);
+    };
+    checkAuthentication();
+  }, [user]);
 
   const handleTaskClick = (task: SetStateAction<null>) => {
     setSelectedTask(task);
@@ -18,7 +34,7 @@ export default function Tasks() {
   return (
     <main className="flex min-h-screen w-full">
       {user ? (
-        <>
+        <Suspense fallback={<div>Loading...</div>}>
           <div className="flex h-full w-3/4 flex-col items-center gap-5 bg-white p-20 text-black">
             <AddTodo />
             <p className="w-full pt-5 text-start text-3xl font-black">
@@ -30,10 +46,12 @@ export default function Tasks() {
           <div className="w-1/5 py-20 text-black">
             <TodoContent selectedTask={selectedTask} />
           </div>
-        </>
+        </Suspense>
       ) : (
-        <Login />
+        <Loading />
       )}
     </main>
   );
 }
+
+// Tasks.requireAuth = true;

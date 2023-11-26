@@ -10,28 +10,19 @@ export default function NavBar() {
   const [loading, setLoading] = useState<boolean>(true);
 
   //user auth
-  const {
-    user,
-    googleSignIn,
-    logOut,
-    githubSignIn,
-    SignUpAdmin,
-    SignUpNonAdmin,
-    loginUser,
-    registerUser,
-  } = UserAuth();
+  const { user, logOut } = UserAuth();
   // console.log(user);
 
   //sign in / sign out
-  const handleSignIn = async (e) => {
-    e.preventDefault();
-    setDivHidden(true);
-    try {
-      await googleSignIn();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleSignIn = async (e) => {
+  //   e.preventDefault();
+  //   setDivHidden(true);
+  //   try {
+  //     await googleSignIn();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const handleSignOut = async (e) => {
     e.preventDefault();
@@ -177,45 +168,17 @@ export default function NavBar() {
           </ul>
         </div>
       ) : (
-        <div
-          className={`z-50 my-4 ${
-            divHidden ? "hidden" : ""
-          } h-58 absolute right-2 top-11 w-64 list-none divide-y divide-gray-100 rounded bg-white text-base shadow dark:divide-gray-600 dark:bg-gray-700`}
-          id="dropdown-no-user"
-        >
-          <ul className="py-1" role="none">
-            <li>
-              <Link
-                href="/login"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                role="menuitem"
-                // onClick={handleSignIn}
-              >
-                Log In
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                role="menuitem"
-                onClick={handleSignIn}
-              >
-                Sign Up
-              </Link>
-            </li>
-          </ul>
-        </div>
+        ""
       )}
 
       {/*----------------------  sidebar --------------------------*/}
       <aside
         id="logo-sidebar"
-        className="h-screen -translate-x-full bg-white pt-20 transition-transform sm:translate-x-0"
+        className="h-screen -translate-x-full pt-20 transition-transform sm:translate-x-0"
         aria-label="Sidebar"
       >
-        <div className="h-full overflow-y-auto bg-white px-3 pb-4">
-          <ul className="space-y-2 font-medium">
+        <div className=" bg-white px-3">
+          <ul className="font-medium">
             <li>
               <Link
                 href="/shuttles"
@@ -223,7 +186,7 @@ export default function NavBar() {
                   router === "/shuttles" ? "text-blue" : ""
                 }`}
               >
-                <span className="ml-3 flex-1 whitespace-nowrap">
+                <span className=" ml-3 flex-1 whitespace-nowrap">
                   All Shuttles
                 </span>
                 <span className="font-regular ml-3 inline-flex h-3 w-3 items-center justify-center rounded-full bg-gray-100 p-3 text-xs text-black">

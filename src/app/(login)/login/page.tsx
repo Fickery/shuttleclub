@@ -47,8 +47,6 @@ export default function Login() {
     <div className="flex h-screen w-full items-center justify-center text-black">
       <div className="w-[20%] border border-gray-100 shadow-sm">
         {user ? (
-          <div className="">/tasks</div>
-        ) : (
           // If user is not logged in, show login options
           <div className="text-center">
             <p className="whitespace-nowrap pt-10 text-4xl font-black tracking-tighter text-black">
@@ -120,6 +118,8 @@ export default function Login() {
               </button>
             </div>
           </div>
+        ) : (
+          <div className="">/tasks</div>
         )}
       </div>
     </div>

@@ -1,10 +1,8 @@
 "use client";
 import Login from "@/app/(login)/login/page";
-import Loader from "@/components/Loader";
+import Loading from "@/app/loading";
 import ShuttleList from "@/components/ShuttleList";
 import TodoContent from "@/components/TodoContent";
-import TodoList from "@/components/TodoList";
-import AddTodo from "@/components/addTodo";
 import { UserAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 
@@ -15,16 +13,18 @@ export default function Page() {
   //loading
   useEffect(() => {
     const checkAuthentication = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 10000));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       setLoading(false);
-      console.log("loading");
+      <Loading />;
     };
     checkAuthentication();
   }, [user]);
 
   return (
     <main className="flex min-h-screen w-full">
-      {user ? (
+      {loading ? (
+        <div className="p-20 text-black">...loading</div>
+      ) : user ? (
         <>
           <div className="flex h-full w-3/4 flex-col items-center gap-5 bg-white p-20 text-black">
             <p className="w-full pt-5 text-start text-3xl font-black">
@@ -34,7 +34,7 @@ export default function Page() {
           </div>
 
           <div className="w-1/5 py-20 text-black">
-            <TodoContent />
+            <TodoContent selectedTask={undefined} />
           </div>
         </>
       ) : (

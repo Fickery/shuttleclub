@@ -28,7 +28,10 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/lib/firebase/auth_signin_redirect.js",
-    "src/hooks/useAuth.ts"
+    "src/hooks/useAuth.ts",
+    "src/layouts/RootLayout.js",
+    "src/context/AuthContext.ts",
+    "src/context/AuthContext.tsx"
   ],
   "exclude": ["node_modules"]
 }

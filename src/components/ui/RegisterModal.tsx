@@ -1,29 +1,44 @@
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalHeader,
-  useDisclosure,
-} from "@nextui-org/react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
-import { auth } from "../../lib/firebase/config";
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
+import { useEffect, useState } from "react";
 import { X } from "react-feather";
+import { UserAuth } from "../../context/AuthContext";
+import { auth } from "../../lib/firebase/config";
+import { useRouter } from "next/navigation";
 
-export default async function RegisterModal({
+export default function RegisterModal({
   isOpen,
   onClose,
 }: {
   isOpen: boolean;
   onClose: () => void;
 }) {
+  const { createEmailUser } = UserAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   // console.log(auth.currentUser.email);
+  const router = useRouter();
 
-  const signIn = async () => {
-    await createUserWithEmailAndPassword(auth, email, password);
+  useEffect(() => {
+    console.log(router);
+  }, [router]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match. Please try again.");
+      return;
+    }
+
+    try {
+      await createEmailUser(auth, email, password);
+      router.push("/login");
+      console.log("success");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -48,48 +63,55 @@ export default async function RegisterModal({
               <p className="py-5 text-center text-2xl font-black">
                 Welcome to the ShuttleClub
               </p>
-              <input
-                type="email"
-                placeholder="Email"
-                className="border-gray-300 text-sm placeholder:text-gray-400"
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-              />
-
-              <input
-                type="password"
-                placeholder="Password"
-                className="border-gray-300 text-sm placeholder:text-gray-400"
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-              />
-              <input
-                type="password"
-                placeholder="Comfirm password"
-                className="border-gray-300 text-sm placeholder:text-gray-400"
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-              />
-              <span className="mx-auto flex gap-1 py-5 text-sm text-gray-400">
-                <p>Already have an account?</p>
-                <p
-                  className="cursor-pointer text-black hover:underline"
-                  onClick={() => {
-                    onClose();
+              <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                <input
+                  type="email"
+                  value={email}
+                  placeholder="Email"
+                  className="border-gray-300 text-sm placeholder:text-gray-400"
+                  onChange={(e) => {
+                    setEmail(e.target.value);
                   }}
+                />
+
+                <input
+                  required
+                  type="password"
+                  value={password}
+                  placeholder="Password"
+                  className="border-gray-300 text-sm placeholder:text-gray-400"
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                />
+                <input
+                  type="password"
+                  placeholder="Comfirm password"
+                  value={confirmPassword}
+                  className="border-gray-300 text-sm placeholder:text-gray-400"
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                  }}
+                />
+                <span className="mx-auto flex gap-1 py-5 text-sm text-gray-400">
+                  <p>Already have an account?</p>
+                  <p
+                    className="cursor-pointer text-black hover:underline"
+                    onClick={() => {
+                      onClose();
+                    }}
+                  >
+                    Login
+                  </p>
+                </span>
+                <button
+                  type="submit"
+                  className="mb-2 bg-gray-500 py-5 text-sm font-medium uppercase text-white hover:bg-gray-400"
+                  onClick={handleSubmit}
                 >
-                  Login
-                </p>
-              </span>
-              <button
-                className="mb-2 bg-gray-500 py-5 text-sm font-medium uppercase text-white hover:bg-gray-400"
-                onClick={signIn}
-              >
-                Sign up
-              </button>
+                  Sign up
+                </button>
+              </form>
             </ModalBody>
           </>
         )}
